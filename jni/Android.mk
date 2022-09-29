@@ -46,7 +46,7 @@ BLACKLIST_SRC_FILES := \
   %/ekho.cpp \
   %/test_ekho.cpp
 
-EKHO_SRC_PATH := ../../../src
+EKHO_SRC_PATH := ../../ekho/src
 
 EKHO_SRC_FILES := \
   $(subst $(LOCAL_PATH)/$(EKHO_SRC_PATH),$(EKHO_SRC_PATH),$(wildcard $(LOCAL_PATH)/$(EKHO_SRC_PATH)/*.c*))
@@ -67,9 +67,9 @@ LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/include \
   $(LOCAL_PATH)/$(SNDFILE_SRC_PATH) \
   $(LOCAL_PATH)/$(EKHO_SRC_PATH) \
-  $(LOCAL_PATH)/$(EKHO_SRC_PATH)/../utfcpp/source \
-  $(LOCAL_PATH)/$(EKHO_SRC_PATH)/../sr-convert \
-  $(LOCAL_PATH)/$(EKHO_SRC_PATH)/../sonic \
+  $(LOCAL_PATH)/utfcpp/source \
+  $(LOCAL_PATH)/sr-convert \
+  $(LOCAL_PATH)/sonic \
   $(FLITEDIR)/include
 
 LOCAL_LDLIBS := -llog \

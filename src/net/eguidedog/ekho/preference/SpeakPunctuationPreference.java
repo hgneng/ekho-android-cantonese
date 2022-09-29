@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reecedunn.espeak.preference;
+package net.eguidedog.ekho.preference;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,9 +26,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
-import com.reecedunn.espeak.R;
-import com.reecedunn.espeak.SpeechSynthesis;
-import com.reecedunn.espeak.VoiceSettings;
+import net.eguidedog.ekho.R;
+import net.eguidedog.ekho.SpeechSynthesis;
+import net.eguidedog.ekho.VoiceSettings;
 
 public class SpeakPunctuationPreference extends DialogPreference {
     private RadioButton mAll;

@@ -143,7 +143,7 @@ public class eSpeakActivity extends Activity {
         inflater.inflate(R.menu.options, menu);
         if (Build.VERSION.SDK_INT < 14) {
             // Hide the eSpeak setting menu item on pre-ICS.
-            menu.findItem(R.id.espeakSettings).setVisible(false);
+            menu.findItem(R.id.ekhoSettings).setVisible(false);
         }
         return true;
     }
@@ -153,7 +153,7 @@ public class eSpeakActivity extends Activity {
     {
         switch (item.getItemId())
         {
-        case R.id.espeakSettings:
+        case R.id.ekhoSettings:
             startActivityForResult(new Intent(eSpeakActivity.this, TtsSettingsActivity.class), REQUEST_DEFAULT);
             return true;
         case R.id.ttsSettings:

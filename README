@@ -6,8 +6,6 @@
 2. fix checksum plugin issue: https://plugins.gradle.org/plugin/org.gradle.crypto.checksum
 3. copy espeak-ng-data from a relase version
 
-
-
 ##### SETUP Android ENV #####
 1. http://source.android.com/source/initializing.html
 2. get sun-java6-jdk from http://www.ubuntuupdates.org/package/sun_java_community_team/maverick/main/base/sun-java6-jdk

@@ -35,7 +35,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech.Engine;
 import android.util.Log;
 
-import com.reecedunn.espeak.SpeechSynthesis.SynthReadyCallback;
+import net.eguidedog.ekho.SpeechSynthesis.SynthReadyCallback;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class CheckVoiceData extends Activity {
-    private static final String TAG = "eSpeakTTS";
+    private static final String TAG = "EkhoTTS";
 
     /** Resources required for eSpeak to run correctly. */
     private static final String[] BASE_RESOURCES = {
@@ -56,7 +56,7 @@ public class CheckVoiceData extends Activity {
     };
 
     public static File getDataPath(Context context) {
-        return new File(context.getDir("voices", MODE_PRIVATE), "espeak-ng-data");
+        return new File(context.getDir("voices", MODE_PRIVATE), "ekho-data");
     }
 
     public static boolean hasBaseResources(Context context) {
@@ -75,13 +75,7 @@ public class CheckVoiceData extends Activity {
     }
 
     public static boolean canUpgradeResources(Context context) {
-        try {
-            final String version = FileUtils.read(context.getResources().openRawResource(R.raw.espeakdata_version));
-            final String installedVersion = FileUtils.read(new File(getDataPath(context), "version"));
-            return !version.equals(installedVersion);
-        } catch (Exception e) {
-            return false;
-        }
+        return true;
     }
 
     @Override

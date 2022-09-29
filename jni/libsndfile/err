@@ -1,0 +1,22 @@
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/dwvw.c: In function 'dwvw_init':
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/dwvw.c:122: warning: overflow in implicit constant conversion
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/obj/local/armeabi/objs/sndfile/libsndfile/src/gsm610.o: In function `gsm610_init':
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:105: undefined reference to `gsm_create'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:112: undefined reference to `gsm_option'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/obj/local/armeabi/objs/sndfile/libsndfile/src/gsm610.o: In function `gsm610_seek':
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:391: undefined reference to `gsm_init'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:394: undefined reference to `gsm_option'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/obj/local/armeabi/objs/sndfile/libsndfile/src/gsm610.o: In function `gsm610_close':
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:617: undefined reference to `gsm_destroy'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/obj/local/armeabi/objs/sndfile/libsndfile/src/gsm610.o: In function `gsm610_decode_block':
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:232: undefined reference to `gsm_decode'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/obj/local/armeabi/objs/sndfile/libsndfile/src/gsm610.o: In function `gsm610_wav_decode_block':
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:204: undefined reference to `gsm_decode'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:209: undefined reference to `gsm_decode'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/obj/local/armeabi/objs/sndfile/libsndfile/src/gsm610.o: In function `gsm610_encode_block':
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:434: undefined reference to `gsm_encode'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/obj/local/armeabi/objs/sndfile/libsndfile/src/gsm610.o: In function `gsm610_wav_encode_block':
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:454: undefined reference to `gsm_encode'
+/cygdrive/d/e-guidedog/eGuideDog_TTS/android/jni/libsndfile/src/gsm610.c:455: undefined reference to `gsm_encode'
+collect2: ld returned 1 exit status
+make: *** [/cygdrive/d/e-guidedog/eGuideDog_TTS/android/obj/local/armeabi/libsndfile.so] Error 1

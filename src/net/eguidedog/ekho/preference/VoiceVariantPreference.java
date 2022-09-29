@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reecedunn.espeak.preference;
+package net.eguidedog.ekho.preference;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,10 +30,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.reecedunn.espeak.R;
-import com.reecedunn.espeak.ResourceIdListAdapter;
-import com.reecedunn.espeak.VoiceSettings;
-import com.reecedunn.espeak.VoiceVariant;
+import net.eguidedog.ekho.R;
+import net.eguidedog.ekho.ResourceIdListAdapter;
+import net.eguidedog.ekho.VoiceSettings;
+import net.eguidedog.ekho.VoiceVariant;
 
 public class VoiceVariantPreference extends DialogPreference {
     private Spinner mCategory;

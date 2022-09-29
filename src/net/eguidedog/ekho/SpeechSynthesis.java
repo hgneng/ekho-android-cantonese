@@ -58,7 +58,7 @@ public class SpeechSynthesis {
     public static final int FORMAT_PCM_S16 = 2;
 
     static {
-        System.loadLibrary("ttsespeak");
+        System.loadLibrary("ttsekho");
 
         nativeClassInit();
     }

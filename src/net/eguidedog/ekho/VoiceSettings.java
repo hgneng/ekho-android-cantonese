@@ -31,15 +31,15 @@ public class VoiceSettings {
     private final SpeechSynthesis mEngine;
 
     public static final String PREF_DEFAULT_GENDER = "default_gender";
-    public static final String PREF_VARIANT = "espeak_variant";
+    public static final String PREF_VARIANT = "ekho_variant";
     public static final String PREF_DEFAULT_RATE = "default_rate";
-    public static final String PREF_RATE = "espeak_rate";
+    public static final String PREF_RATE = "ekho__rate";
     public static final String PREF_DEFAULT_PITCH = "default_pitch";
-    public static final String PREF_PITCH = "espeak_pitch";
-    public static final String PREF_PITCH_RANGE = "espeak_pitch_range";
-    public static final String PREF_VOLUME = "espeak_volume";
-    public static final String PREF_PUNCTUATION_LEVEL = "espeak_punctuation_level";
-    public static final String PREF_PUNCTUATION_CHARACTERS = "espeak_punctuation_characters";
+    public static final String PREF_PITCH = "ekho__pitch";
+    public static final String PREF_PITCH_RANGE = "ekho__pitch_range";
+    public static final String PREF_VOLUME = "ekho__volume";
+    public static final String PREF_PUNCTUATION_LEVEL = "ekho__punctuation_level";
+    public static final String PREF_PUNCTUATION_CHARACTERS = "ekho__punctuation_characters";
 
     public static final String PRESET_VARIANT = "variant";
     public static final String PRESET_RATE = "rate";

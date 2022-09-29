@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reecedunn.espeak.preference;
+package net.eguidedog.ekho.preference;
 
 import android.app.Activity;
 import android.app.DownloadManager;
@@ -28,11 +28,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Spinner;
 
-import com.reecedunn.espeak.CheckVoiceData;
-import com.reecedunn.espeak.DownloadVoiceData;
-import com.reecedunn.espeak.FileListAdapter;
-import com.reecedunn.espeak.FileUtils;
-import com.reecedunn.espeak.R;
+import net.eguidedog.ekho.CheckVoiceData;
+import net.eguidedog.ekho.DownloadVoiceData;
+import net.eguidedog.ekho.FileListAdapter;
+import net.eguidedog.ekho.FileUtils;
+import net.eguidedog.ekho.R;
 
 import java.io.File;
 import java.io.FileFilter;

@@ -4,23 +4,23 @@ LOCAL_PATH:= $(call my-dir)
 # Setup Flite related paths
 
 # We require that FLITEDIR be defined
-ifndef FLITEDIR
-  $(error "FLITEDIR variable should be set to path where flite is compiled")
-endif
+#ifndef FLITEDIR
+#  $(error "FLITEDIR variable should be set to path where flite is compiled")
+#endif
 
-FLITE_BUILD_SUBDIR:=$(TARGET_ARCH_ABI)
+#FLITE_BUILD_SUBDIR:=$(TARGET_ARCH_ABI)
 
-ifeq "$(TARGET_ARCH_ABI)" "armeabi-v7a"
-  FLITE_BUILD_SUBDIR:="armeabiv7a"
-endif
+#ifeq "$(TARGET_ARCH_ABI)" "armeabi-v7a"
+#  FLITE_BUILD_SUBDIR:="armeabiv7a"
+#endif
 
-FLITE_LIB_DIR:= $(FLITEDIR)/build/$(FLITE_BUILD_SUBDIR)-android/lib
+#FLITE_LIB_DIR:= $(FLITEDIR)/build/$(FLITE_BUILD_SUBDIR)-android/lib
 ###########################################################################
 
 include $(CLEAR_VARS)
 
 # sndfile
-SNDFILE_SRC_PATH := ../../../android_engine2/external/ekho/libsndfile/src
+SNDFILE_SRC_PATH := libsndfile/src
 
 SNDFILE_SRC_FILES := \
   $(subst $(LOCAL_PATH)/$(SNDFILE_SRC_PATH),$(SNDFILE_SRC_PATH),$(wildcard $(LOCAL_PATH)/$(SNDFILE_SRC_PATH)/*.c*))
@@ -51,7 +51,7 @@ EKHO_SRC_PATH := ../../../src
 EKHO_SRC_FILES := \
   $(subst $(LOCAL_PATH)/$(EKHO_SRC_PATH),$(EKHO_SRC_PATH),$(wildcard $(LOCAL_PATH)/$(EKHO_SRC_PATH)/*.c*))
 
-EKHO_SRC_FILES += ../../../sr-convert/dsp.cpp ../../../sonic/sonic.c
+EKHO_SRC_FILES += sr-convert/dsp.cpp sonic/sonic.c
   
 LOCAL_SRC_FILES += \
   $(filter-out $(BLACKLIST_SRC_FILES),$(EKHO_SRC_FILES))

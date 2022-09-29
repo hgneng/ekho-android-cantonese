@@ -39,7 +39,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class DownloadVoiceData extends Activity {
-    public static final String BROADCAST_LANGUAGES_UPDATED = "com.reecedunn.espeak.LANGUAGES_UPDATED";
+    public static final String BROADCAST_LANGUAGES_UPDATED = "net.eguidedog.ekho.LANGUAGES_UPDATED";
 
     private AsyncExtract mAsyncExtract;
     private ProgressBar mProgress;
@@ -53,7 +53,7 @@ public class DownloadVoiceData extends Activity {
 
         final File dataPath = CheckVoiceData.getDataPath(this).getParentFile();
 
-        mAsyncExtract = new AsyncExtract(this, R.raw.espeakdata, dataPath, mProgress) {
+        mAsyncExtract = new AsyncExtract(this, R.raw.ekhodata, dataPath, mProgress) {
             @Override
             protected void onPostExecute(Integer result) {
                 switch (result) {
@@ -157,8 +157,8 @@ public class DownloadVoiceData extends Activity {
                     FileUtils.chmod(progress.file);
                 }
 
-                final String version = FileUtils.read(mContext.getResources().openRawResource(R.raw.espeakdata_version));
-                final File outputFile = new File(mOutput, "espeak-ng-data/version");
+                final String version = FileUtils.read(mContext.getResources().openRawResource(R.raw.ekhodata_version));
+                final File outputFile = new File(mOutput, "ekho-data/version");
 
                 FileUtils.write(outputFile, version);
                 return RESULT_OK;

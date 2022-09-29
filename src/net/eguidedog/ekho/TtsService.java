@@ -45,7 +45,7 @@ import android.speech.tts.TextToSpeechService;
 import android.util.Log;
 import android.util.Pair;
 
-import com.reecedunn.espeak.SpeechSynthesis.SynthReadyCallback;
+import net.eguidedog.ekho.SpeechSynthesis.SynthReadyCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +63,7 @@ import java.util.Set;
  */
 @SuppressLint("NewApi")
 public class TtsService extends TextToSpeechService {
-    public static final String ESPEAK_INITIALIZED = "com.reecedunn.espeak.ESPEAK_INITIALIZED";
+    public static final String EKHO_INITIALIZED = "net.eguidedog.ekho.ESPEAK_INITIALIZED";
 
     private static final String TAG = TtsService.class.getSimpleName();
     private static final boolean DEBUG = false;

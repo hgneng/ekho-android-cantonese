@@ -105,7 +105,7 @@ public class TtsService extends TextToSpeechService {
             mAvailableVoices.put(voice.name, voice);
         }
 
-        final Intent intent = new Intent(ESPEAK_INITIALIZED);
+        final Intent intent = new Intent(EKHO_INITIALIZED);
         sendBroadcast(intent);
     }
 

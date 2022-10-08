@@ -70,13 +70,13 @@
   <string name="speak">Speak</string>
   <string name="ssml">Load SSML Template</string>
   <string name="synthesis_demo">Enter text to speak:</string>
-  <string name="espeak_volume">Volume</string>
+  <string name="ekho_volume">Volume</string>
   <string name="formatter_wpm">%s WPM</string>
   <string name="formatter_percentage">%s%%</string>
   <string name="resetToDefault">Set to default</string>
-  <string name="espeak_pitch_range">Pitch variation</string>
-  <string name="espeak_variant">Voice variant</string>
-  <string name="espeak_speak_punctuation">Speak punctuation</string>
+  <string name="ekho_pitch_range">Pitch variation</string>
+  <string name="ekho_variant">Voice variant</string>
+  <string name="ekho_speak_punctuation">Speak punctuation</string>
   <string name="punctuation_all">All</string>
   <string name="punctuation_custom">Custom</string>
   <string name="punctuation_custom_fmt">Custom: %s</string>

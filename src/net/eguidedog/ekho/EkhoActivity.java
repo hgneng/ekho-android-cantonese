@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class eSpeakActivity extends Activity {
+public class EkhoActivity extends Activity {
     private static final String ACTION_TTS_SETTINGS = "com.android.settings.TTS_SETTINGS";
 
     /** Handler code for TTS initialization hand-off. */
@@ -121,7 +121,7 @@ public class eSpeakActivity extends Activity {
     public void onStart() {
         super.onStart();
 
-        final IntentFilter filter = new IntentFilter(TtsService.ESPEAK_INITIALIZED);
+        final IntentFilter filter = new IntentFilter(TtsService.EKHO_INITIALIZED);
         registerReceiver(mOnEspeakInitialized, filter);
     }
 
@@ -154,7 +154,7 @@ public class eSpeakActivity extends Activity {
         switch (item.getItemId())
         {
         case R.id.ekhoSettings:
-            startActivityForResult(new Intent(eSpeakActivity.this, TtsSettingsActivity.class), REQUEST_DEFAULT);
+            startActivityForResult(new Intent(EkhoActivity.this, TtsSettingsActivity.class), REQUEST_DEFAULT);
             return true;
         case R.id.ttsSettings:
             launchGeneralTtsSettings();
@@ -308,11 +308,11 @@ public class eSpeakActivity extends Activity {
     };
 
     private static class EspeakHandler extends Handler {
-    	private WeakReference<eSpeakActivity> mActivity;
+    	private WeakReference<EkhoActivity> mActivity;
 
-    	public EspeakHandler(eSpeakActivity activity)
+    	public EspeakHandler(EkhoActivity activity)
     	{
-    		mActivity = new WeakReference<eSpeakActivity>(activity);
+    		mActivity = new WeakReference<EkhoActivity>(activity);
     	}
 
     	@Override

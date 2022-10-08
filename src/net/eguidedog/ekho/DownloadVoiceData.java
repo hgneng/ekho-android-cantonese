@@ -157,7 +157,7 @@ public class DownloadVoiceData extends Activity {
                     FileUtils.chmod(progress.file);
                 }
 
-                final String version = FileUtils.read(mContext.getResources().openRawResource(R.raw.ekhodata_version));
+                final String version = "1"; //FileUtils.read(mContext.getResources().openRawResource(R.raw.ekhodata_version));
                 final File outputFile = new File(mOutput, "ekho-data/version");
 
                 FileUtils.write(outputFile, version);

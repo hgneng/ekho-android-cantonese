@@ -38,6 +38,32 @@
 
 #define BUFFER_SIZE_IN_MILLISECONDS 1000
 
+const int DEFAULT_SAMPLE_RATE = 16000;
+//const int DEFAULT_CHANNEL_COUNT = CHANNEL_COUNT_MONO;
+//const int DEFAULT_AUDIO_FORMAT = ENCODING_PCM_16BIT;
+const int DEFAULT_BUFFER_SIZE = 1000;
+
+struct native_data_t {
+    JNIEnv *env;
+    jobject object;
+    int sampleRate;
+    int channelCount;
+    int audioFormat;
+    int bufferSizeInMillis;
+
+    native_data_t() {
+      env = NULL;
+      object = NULL;
+      sampleRate = DEFAULT_SAMPLE_RATE;
+      //channelCount = DEFAULT_CHANNEL_COUNT;
+      //audioFormat = DEFAULT_AUDIO_FORMAT;
+      bufferSizeInMillis = DEFAULT_BUFFER_SIZE;
+    }
+};
+
+jfieldID FIELD_mNativeData;
+ekho::Ekho *gp_ekho = 0;
+
 /* These are helpers for converting a jstring to wchar_t*.
  *
  * This assumes that wchar_t is a 32-bit (UTF-32) value.
@@ -73,7 +99,7 @@ static wchar_t *unicode_string(JNIEnv *env, jstring str)
 {
   if (str == NULL) return NULL;
 
-  const char *utf8 = (*env)->GetStringUTFChars(env, str, NULL);
+  const char *utf8 = env->GetStringUTFChars(str, NULL);
   wchar_t *utf32 = (wchar_t *)malloc((strlen(utf8) + 1) * sizeof(wchar_t));
 
   const char *utf8_current = utf8;
@@ -85,7 +111,7 @@ static wchar_t *unicode_string(JNIEnv *env, jstring str)
   }
   *utf32_current = 0;
 
-  (*env)->ReleaseStringUTFChars(env, str, utf8);
+  env->ReleaseStringUTFChars(str, utf8);
   return utf32;
 }
 
@@ -104,23 +130,24 @@ jmethodID METHOD_nativeSynthCallback;
 
 static JNIEnv *getJniEnv() {
   JNIEnv *env = NULL;
-  (*jvm)->AttachCurrentThread(jvm, &env, NULL);
+  jvm->AttachCurrentThread(&env, NULL);
   return env;
 }
 
 /* Callback from espeak.  Should call back to the TTS API */
 static int SynthCallback(short *audioData, int numSamples,
-                         espeak_EVENT *events) {
+                         void *data, OverlapType type) {
   JNIEnv *env = getJniEnv();
-  jobject object = (jobject)events->user_data;
+  native_data_t *nat = (native_data_t *) data;
+  jobject object = nat->object;
 
   if (numSamples < 1) {
-    (*env)->CallVoidMethod(env, object, METHOD_nativeSynthCallback, NULL);
+    env->CallVoidMethod(object, METHOD_nativeSynthCallback, NULL);
     return SYNTH_ABORT;
   } else {
-    jbyteArray arrayAudioData = (*env)->NewByteArray(env, numSamples * 2);
-    (*env)->SetByteArrayRegion(env, arrayAudioData, 0, (numSamples * 2), (jbyte *) audioData);
-    (*env)->CallVoidMethod(env, object, METHOD_nativeSynthCallback, arrayAudioData);
+    jbyteArray arrayAudioData = env->NewByteArray(numSamples * 2);
+    env->SetByteArrayRegion(arrayAudioData, 0, (numSamples * 2), (jbyte *) audioData);
+    env->CallVoidMethod(object, METHOD_nativeSynthCallback, arrayAudioData);
     return SYNTH_CONTINUE;
   }
 }
@@ -134,7 +161,7 @@ JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
   jvm = vm;
   JNIEnv *env;
 
-  if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+  if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
     LOGE("Failed to get the environment using GetEnv()");
     return -1;
   }
@@ -146,7 +173,7 @@ JNIEXPORT jboolean
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeClassInit(
     JNIEnv* env, jclass clazz) {
   if (DEBUG) LOGV("%s", __FUNCTION__);
-  METHOD_nativeSynthCallback = (*env)->GetMethodID(env, clazz, "nativeSynthCallback", "([B)V");
+  METHOD_nativeSynthCallback = env->GetMethodID(clazz, "nativeSynthCallback", "([B)V");
 
   return JNI_TRUE;
 }
@@ -156,184 +183,130 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
     JNIEnv *env, jobject object, jstring path) {
   if (DEBUG) LOGV("%s [env=%p, object=%p]", __FUNCTION__, env, object);
 
-  const char *c_path = path ? (*env)->GetStringUTFChars(env, path, NULL) : NULL;
+  const char *c_path = path ? env->GetStringUTFChars(path, NULL) : NULL;
 
   if (DEBUG) LOGV("Initializing with path %s", c_path);
-  int sampleRate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, BUFFER_SIZE_IN_MILLISECONDS, c_path, 0);
+  int sampleRate = 0; //espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, BUFFER_SIZE_IN_MILLISECONDS, c_path, 0);
 
-  if (c_path) (*env)->ReleaseStringUTFChars(env, path, c_path);
+  if (c_path) env->ReleaseStringUTFChars(path, c_path);
 
   return sampleRate;
 }
 
-JNIEXPORT jobject
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeGetVersion(
+JNIEXPORT jstring
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeGetVersion(
     JNIEnv *env, jclass clazz) {
   if (DEBUG) LOGV("%s", __FUNCTION__);
-  return (*env)->NewStringUTF(env, espeak_Info(NULL));
+  return env->NewStringUTF("9.0"); //espeak_Info(NULL));
 }
 
 JNIEXPORT jobjectArray
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeGetAvailableVoices(
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeGetAvailableVoices(
     JNIEnv *env, jobject object) {
   if (DEBUG) LOGV("%s", __FUNCTION__);
 
-  const espeak_VOICE **voices = espeak_ListVoices(NULL);
+  jobjectArray voicesArray = (jobjectArray) env->NewObjectArray(
+      4, env->FindClass("java/lang/String"), NULL);
 
-  int count;
+  // Cantonese
+  int voicesIndex = 0;
+  env->SetObjectArrayElement(
+      voicesArray, voicesIndex++, env->NewStringUTF("yue"));
+  env->SetObjectArrayElement(
+      voicesArray, voicesIndex++, env->NewStringUTF("yue"));
+  env->SetObjectArrayElement(
+      voicesArray, voicesIndex++, env->NewStringUTF("1"));
+  env->SetObjectArrayElement(
+      voicesArray, voicesIndex++, env->NewStringUTF("28"));
 
-  // First, count the number of voices returned.
-  for (count = 0; voices[count] != NULL; count++);
-
-  // Next, create a Java String array.
-  jobjectArray voicesArray = (jobjectArray) (*env)->NewObjectArray(
-      env, count * 4, (*env)->FindClass(env, "java/lang/String"), NULL);
-
-  const espeak_VOICE *v;
-  char gender_buf[12];
-  char age_buf[12];
-
-  // Finally, populate the array.
-  for (int i = 0, voicesIndex = 0; (v = voices[i]) != NULL; i++) {
-    const char *lang_name = v->languages + 1;
-    const char *identifier = v->identifier;
-    sprintf(gender_buf, "%d", v->gender);
-    sprintf(age_buf, "%d", v->age);
-
-    (*env)->SetObjectArrayElement(
-        env, voicesArray, voicesIndex++, (*env)->NewStringUTF(env, lang_name));
-    (*env)->SetObjectArrayElement(
-        env, voicesArray, voicesIndex++, (*env)->NewStringUTF(env, identifier));
-    (*env)->SetObjectArrayElement(
-        env, voicesArray, voicesIndex++, (*env)->NewStringUTF(env, gender_buf));
-    (*env)->SetObjectArrayElement(
-        env, voicesArray, voicesIndex++, (*env)->NewStringUTF(env, age_buf));
-  }
-
+  // Mandarin
+  /*
+  env->SetObjectArrayElement(
+      voicesArray, voicesIndex++, env->NewStringUTF("zho"));
+  env->SetObjectArrayElement(
+      voicesArray, voicesIndex++, env->NewStringUTF("zho"));
+  env->SetObjectArrayElement(
+      voicesArray, voicesIndex++, env->NewStringUTF("0"));
+  env->SetObjectArrayElement(
+      voicesArray, voicesIndex++, env->NewStringUTF("28"));
+*/
   return voicesArray;
 }
 
 JNIEXPORT jboolean
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeSetVoiceByName(
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetVoiceByName(
     JNIEnv *env, jobject object, jstring name) {
-  const char *c_name = name ? (*env)->GetStringUTFChars(env, name, NULL) : NULL;
+  const char *c_name = name ? env->GetStringUTFChars(name, NULL) : NULL;
 
   if (DEBUG) LOGV("%s(name=%s)", __FUNCTION__, c_name);
 
-  const espeak_ERROR result = espeak_SetVoiceByName(c_name);
-
-  if (c_name) (*env)->ReleaseStringUTFChars(env, name, c_name);
-
-  switch (result) {
-    case EE_OK:             return JNI_TRUE;
-    case EE_INTERNAL_ERROR: LOGE("espeak_SetVoiceByName: internal error."); break;
-    case EE_BUFFER_FULL:    LOGE("espeak_SetVoiceByName: buffer full."); break;
-    case EE_NOT_FOUND:      LOGE("espeak_SetVoiceByName: not found."); break;
-  }
-
   return JNI_FALSE;
 }
 
 JNIEXPORT jboolean
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeSetVoiceByProperties(
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetVoiceByProperties(
     JNIEnv *env, jobject object, jstring language, jint gender, jint age) {
-  const char *c_language = language ? (*env)->GetStringUTFChars(env, language, NULL) : NULL;
+  const char *c_language = language ? env->GetStringUTFChars(language, NULL) : NULL;
 
   if (DEBUG) LOGV("%s(language=%s, gender=%d, age=%d)", __FUNCTION__, c_language, gender, age);
 
-  espeak_VOICE voice_select;
-  memset(&voice_select, 0, sizeof(espeak_VOICE));
-  voice_select.languages = c_language;
-  voice_select.gender = (int) gender;
-  voice_select.age = (int) age;
-
-  const espeak_ERROR result = espeak_SetVoiceByProperties(&voice_select);
-
-  if (c_language) (*env)->ReleaseStringUTFChars(env, language, c_language);
-
-  switch (result) {
-    case EE_OK:             return JNI_TRUE;
-    case EE_INTERNAL_ERROR: LOGE("espeak_SetVoiceByProperties: internal error."); break;
-    case EE_BUFFER_FULL:    LOGE("espeak_SetVoiceByProperties: buffer full."); break;
-    case EE_NOT_FOUND:      LOGE("espeak_SetVoiceByProperties: not found."); break;
-  }
-
   return JNI_FALSE;
 }
 
 JNIEXPORT jboolean
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeSetParameter(
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetParameter(
     JNIEnv *env, jobject object, jint parameter, jint value) {
   if (DEBUG) LOGV("%s(parameter=%d, value=%d)", __FUNCTION__, parameter, value);
-  const espeak_ERROR result = espeak_SetParameter((espeak_PARAMETER)parameter, (int)value, 0);
-
-  switch (result) {
-    case EE_OK:             return JNI_TRUE;
-    case EE_INTERNAL_ERROR: LOGE("espeak_SetParameter: internal error."); break;
-    case EE_BUFFER_FULL:    LOGE("espeak_SetParameter: buffer full."); break;
-    case EE_NOT_FOUND:      LOGE("espeak_SetParameter: not found."); break;
-  }
 
   return JNI_FALSE;
 }
 
 JNIEXPORT jint
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeGetParameter(
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeGetParameter(
     JNIEnv *env, jobject object, jint parameter, jint current) {
   if (DEBUG) LOGV("%s(parameter=%d, pitch=%d)", __FUNCTION__, parameter, current);
-  return espeak_GetParameter((espeak_PARAMETER)parameter, (int)current);
+  return 0;
 }
 
 JNIEXPORT jboolean
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeSetPunctuationCharacters(
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetPunctuationCharacters(
     JNIEnv *env, jobject object, jstring characters) {
   if (DEBUG) LOGV("%s)", __FUNCTION__);
-
-  wchar_t *list = unicode_string(env, characters);
-  const espeak_ERROR result = espeak_SetPunctuationList(list);
-  free(list);
-  switch (result) {
-    case EE_OK:             return JNI_TRUE;
-    case EE_INTERNAL_ERROR: LOGE("espeak_SetPunctuationList: internal error."); break;
-    case EE_BUFFER_FULL:    LOGE("espeak_SetPunctuationList: buffer full."); break;
-    case EE_NOT_FOUND:      LOGE("espeak_SetPunctuationList: not found."); break;
-  }
 
   return JNI_FALSE;
 }
 
+static native_data_t *getNativeData(JNIEnv *env, jobject object) {
+  return (native_data_t *) (env->GetIntField(object, FIELD_mNativeData));
+}
+
 JNIEXPORT jboolean
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeSynthesize(
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSynthesize(
     JNIEnv *env, jobject object, jstring text, jboolean isSsml) {
   if (DEBUG) LOGV("%s", __FUNCTION__);
-  const char *c_text = text ? (*env)->GetStringUTFChars(env, text, NULL) : NULL;
-  unsigned int unique_identifier;
 
-  espeak_SetSynthCallback(SynthCallback);
-  const espeak_ERROR result = espeak_Synth(c_text, strlen(c_text), 0,  // position
-               POS_CHARACTER, 0, // end position (0 means no end position)
-               isSsml ? espeakCHARS_UTF8 | espeakSSML // UTF-8 encoded SSML
-                      : espeakCHARS_UTF8,             // UTF-8 encoded text
-               &unique_identifier, object);
-  espeak_Synchronize();
+  native_data_t *nat = getNativeData(env, object);
+  const char *c_text = env->GetStringUTFChars(text, NULL);
+  nat->env = env;
 
-  if (c_text) (*env)->ReleaseStringUTFChars(env, text, c_text);
-
-  switch (result) {
-    case EE_OK:             return JNI_TRUE;
-    case EE_INTERNAL_ERROR: LOGE("espeak_Synth: internal error."); break;
-    case EE_BUFFER_FULL:    LOGE("espeak_Synth: buffer full."); break;
-    case EE_NOT_FOUND:      LOGE("espeak_Synth: not found."); break;
+  if (DEBUG) LOGV("gp_ekho: %p", gp_ekho);
+  if (gp_ekho && *c_text) {
+    if (DEBUG) LOGV("synth(len=%d): %ul", strlen(c_text), c_text);
+    gp_ekho->synth2(c_text, SynthCallback, nat);
   }
+
+  env->ReleaseStringUTFChars(text, c_text);
 
   return JNI_TRUE;
 }
 
 JNIEXPORT jboolean
-JNICALL Java_com_reecedunn_espeak_SpeechSynthesis_nativeStop(
+JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeStop(
     JNIEnv *env, jobject object) {
   if (DEBUG) LOGV("%s", __FUNCTION__);
-  espeak_Cancel();
+
+  if (gp_ekho)
+    gp_ekho->stop();
 
   return JNI_TRUE;
 }

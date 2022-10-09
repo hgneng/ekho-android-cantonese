@@ -56,7 +56,7 @@ EKHO_SRC_FILES += sr-convert/dsp.cpp sonic/sonic.c
 LOCAL_SRC_FILES += \
   $(filter-out $(BLACKLIST_SRC_FILES),$(EKHO_SRC_FILES))
 
-LOCAL_CFLAGS := -DOUTPUT16BIT -DNO_SSE -O0 -DANDROID #-DDEBUG_ANDROID
+LOCAL_CFLAGS := -fexceptions -Wno-bitwise-op-parentheses -Wno-shift-negative-value -DOUTPUT16BIT -DNO_SSE -O0 -DANDROID #-DDEBUG_ANDROID
 
 # JNI
 
@@ -72,10 +72,10 @@ LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/sonic \
   $(FLITEDIR)/include
 
-LOCAL_LDLIBS := -llog \
-  $(FLITE_LIB_DIR)/libflite_cmulex.a \
-  $(FLITE_LIB_DIR)/libflite_usenglish.a \
-  $(FLITE_LIB_DIR)/libflite.a \
+LOCAL_LDLIBS := -llog -lstdc++ #\
+#  $(FLITE_LIB_DIR)/libflite_cmulex.a \
+#  $(FLITE_LIB_DIR)/libflite_usenglish.a \
+#  $(FLITE_LIB_DIR)/libflite.a \
   
 # Common
 

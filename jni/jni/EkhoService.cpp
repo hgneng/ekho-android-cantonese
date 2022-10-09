@@ -291,7 +291,7 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSynthesize(
 
   if (DEBUG) LOGV("gp_ekho: %p", gp_ekho);
   if (gp_ekho && *c_text) {
-    if (DEBUG) LOGV("synth(len=%d): %ul", strlen(c_text), c_text);
+    if (DEBUG) LOGV("synth(len=%ul): %s", strlen(c_text), c_text);
     gp_ekho->synth2(c_text, SynthCallback, nat);
   }
 

@@ -72,7 +72,7 @@ public class CheckVoiceData extends Activity {
     }
 
     public static boolean canUpgradeResources(Context context) {
-        return true;
+        return false;
     }
 
     @Override

@@ -142,7 +142,7 @@ public class EkhoActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options, menu);
         if (Build.VERSION.SDK_INT < 14) {
-            // Hide the eSpeak setting menu item on pre-ICS.
+            // Hide the Ekho setting menu item on pre-ICS.
             menu.findItem(R.id.ekhoSettings).setVisible(false);
         }
         return true;

@@ -88,7 +88,7 @@ public class TtsService extends TextToSpeechService {
     }
 
     /**
-     * Sets up the native eSpeak engine.
+     * Sets up the native Ekho engine.
      */
     private void initializeTtsEngine() {
         if (mEngine != null) {
@@ -317,7 +317,7 @@ public class TtsService extends TextToSpeechService {
     }
 
     /**
-     * Pipes synthesizer output from native eSpeak to an {@link AudioTrack}.
+     * Pipes synthesizer output from native Ekho to an {@link AudioTrack}.
      */
     private final SpeechSynthesis.SynthReadyCallback mSynthCallback = new SynthReadyCallback() {
         @Override

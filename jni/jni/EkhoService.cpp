@@ -21,7 +21,7 @@
  */
 
 /*
- * This file contains the JNI bindings to eSpeak used by SpeechSynthesis.java.
+ * This file contains the JNI bindings to Ekho used by SpeechSynthesis.java.
  *
  * Android Version: 4.0 (Ice Cream Sandwich)
  * API Version:     14

@@ -87,11 +87,6 @@
   <string name="variant_male">Male</string>
   <string name="variant_female">Female</string>
   <string name="variant_default">Default</string>
-  <string name="variant_n">Variant %d</string>
-  <string name="variant_young">Young</string>
-  <string name="variant_old">Old</string>
-  <string name="variant_croak">Croak</string>
-  <string name="variant_whisper">Whisper</string>
   <string name="import_voice_title">Import Ekho dictionary</string>
   <string name="import_voice_description">Import an Ekho voice dictionary file from the SD card.</string>
 </resources>

@@ -45,14 +45,11 @@ import java.util.Locale;
 public class CheckVoiceData extends Activity {
     private static final String TAG = "EkhoTTS";
 
-    /** Resources required for eSpeak to run correctly. */
+    /** Resources required for Ekho to run correctly. */
     private static final String[] BASE_RESOURCES = {
-        "version",
-        "intonations",
-        "phondata",
-        "phonindex",
-        "phontab",
-        "en_dict",
+        "zhy.dict",
+        "jyutping.index",
+        "jyutping.voice",
     };
 
     public static File getDataPath(Context context) {

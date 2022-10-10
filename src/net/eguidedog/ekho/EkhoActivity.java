@@ -56,7 +56,7 @@ public class EkhoActivity extends Activity {
     private static final int REQUEST_CHECK = 1;
     private static final int REQUEST_DEFAULT = 3;
 
-	private static final String TAG = "eSpeakActivity";
+	private static final String TAG = "EkhoActivity";
 
     private enum State {
         LOADING,

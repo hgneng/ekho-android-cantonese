@@ -21,7 +21,7 @@
  */
 
 /*
- * This file implements the Android Text-to-Speech engine for eSpeak.
+ * This file implements the Android Text-to-Speech engine for Ekho.
  *
  * Android Version: 4.0 (Ice Cream Sandwich)
  * API Version:     14
@@ -56,10 +56,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Implements the eSpeak engine as a {@link TextToSpeechService}.
- *
- * @author msclrhd@gmail.com (Reece H. Dunn)
- * @author alanv@google.com (Alan Viverette)
+ * Implements the Ekho engine as a {@link TextToSpeechService}.
  */
 @SuppressLint("NewApi")
 public class TtsService extends TextToSpeechService {

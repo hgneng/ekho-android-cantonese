@@ -21,7 +21,7 @@
  */
 
 /*
- * This file implements the Java API to eSpeak using the JNI bindings.
+ * This file implements the Java API to Ekho using the JNI bindings.
  *
  * Android Version: 4.0 (Ice Cream Sandwich)
  * API Version:     14

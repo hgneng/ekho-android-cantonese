@@ -22,7 +22,7 @@
   <string name="installing_voice_data">Installing voice data…</string>
   <!--
         Source: Dialog message.
-        Description: Alert dialog prompting the user to set eSpeak as their default TTS engine.
+        Description: Alert dialog prompting the user to set Ekho as their default TTS engine.
     -->
   <string name="set_default_message">Ekho is not set as your default text-to-speech engine.</string>
   <!--
@@ -52,12 +52,12 @@
   <string name="tts_settings">General TTS settings</string>
   <!--
         Source: Button label.
-        Description: Button for launching eSpeak-specific settings.
+        Description: Button for launching Ekho-specific settings.
     -->
   <string name="engine_settings">Ekho TTS settings</string>
   <!--
         Source: Label text.
-        Description: Label informing the user that eSpeak is loading resources.
+        Description: Label informing the user that Ekho is loading resources.
     -->
   <string name="loading">Loading, please wait…</string>
   <!--

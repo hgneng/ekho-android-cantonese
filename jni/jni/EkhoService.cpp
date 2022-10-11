@@ -244,16 +244,6 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetVoiceByName(
 }
 
 JNIEXPORT jboolean
-JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetVoiceByProperties(
-    JNIEnv *env, jobject object, jstring language, jint gender, jint age) {
-  const char *c_language = language ? env->GetStringUTFChars(language, NULL) : NULL;
-
-  if (DEBUG) LOGV("%s(language=%s, gender=%d, age=%d)", __FUNCTION__, c_language, gender, age);
-
-  return JNI_FALSE;
-}
-
-JNIEXPORT jboolean
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetParameter(
     JNIEnv *env, jobject object, jint parameter, jint value) {
   if (DEBUG) LOGV("%s(parameter=%d, value=%d)", __FUNCTION__, parameter, value);

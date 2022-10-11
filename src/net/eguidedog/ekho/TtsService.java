@@ -306,10 +306,9 @@ public class TtsService extends TextToSpeechService {
         mCallback.start(mEngine.getSampleRate(), mEngine.getAudioFormat(), mEngine.getChannelCount());
 
         final VoiceSettings settings = new VoiceSettings(PreferenceManager.getDefaultSharedPreferences(this), mEngine);
-        mEngine.setVoice(mMatchingVoice, settings.getVoiceVariant());
+        mEngine.setVoice(mMatchingVoice);
         mEngine.Rate.setValue(settings.getRate(), request.getSpeechRate());
         mEngine.Pitch.setValue(settings.getPitch(), request.getPitch());
-        mEngine.PitchRange.setValue(settings.getPitchRange());
         mEngine.Volume.setValue(settings.getVolume());
         mEngine.Punctuation.setValue(settings.getPunctuationLevel());
         mEngine.setPunctuationCharacters(settings.getPunctuationCharacters());

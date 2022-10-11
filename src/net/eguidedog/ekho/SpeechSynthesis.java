@@ -173,14 +173,8 @@ public class SpeechSynthesis {
         return voices;
     }
 
-    public void setVoice(Voice voice, VoiceVariant variant) {
-        // NOTE: espeak_SetVoiceByProperties does not support specifying the
-        // voice variant (e.g. klatt), but espeak_SetVoiceByName does.
-        if (variant.variant == null) {
-            nativeSetVoiceByProperties(voice.name, variant.gender, variant.age);
-        } else {
-            nativeSetVoiceByName(voice.identifier + "+" + variant.variant);
-        }
+    public void setVoice(Voice voice) {
+        nativeSetVoiceByName(voice.identifier);
     }
 
     public void setPunctuationCharacters(String characters) {

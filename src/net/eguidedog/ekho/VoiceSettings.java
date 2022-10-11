@@ -30,18 +30,14 @@ public class VoiceSettings {
     private final SharedPreferences mPreferences;
     private final SpeechSynthesis mEngine;
 
-    public static final String PREF_DEFAULT_GENDER = "default_gender";
-    public static final String PREF_VARIANT = "ekho_variant";
     public static final String PREF_DEFAULT_RATE = "default_rate";
     public static final String PREF_RATE = "ekho__rate";
     public static final String PREF_DEFAULT_PITCH = "default_pitch";
     public static final String PREF_PITCH = "ekho__pitch";
-    public static final String PREF_PITCH_RANGE = "ekho__pitch_range";
     public static final String PREF_VOLUME = "ekho__volume";
     public static final String PREF_PUNCTUATION_LEVEL = "ekho__punctuation_level";
     public static final String PREF_PUNCTUATION_CHARACTERS = "ekho__punctuation_characters";
 
-    public static final String PRESET_VARIANT = "variant";
     public static final String PRESET_RATE = "rate";
     public static final String PRESET_PITCH = "pitch";
     public static final String PRESET_PITCH_RANGE = "pitch-range";
@@ -56,18 +52,6 @@ public class VoiceSettings {
     public VoiceSettings(SharedPreferences preferences, SpeechSynthesis engine) {
         mPreferences = preferences;
         mEngine = engine;
-    }
-
-    public VoiceVariant getVoiceVariant() {
-        String variant = mPreferences.getString(PREF_VARIANT, null);
-        if (variant == null) {
-            int gender = getPreferenceValue(PREF_DEFAULT_GENDER, SpeechSynthesis.GENDER_MALE);
-            if (gender == SpeechSynthesis.GENDER_FEMALE) {
-                return VoiceVariant.parseVoiceVariant(VoiceVariant.FEMALE);
-            }
-            return VoiceVariant.parseVoiceVariant(VoiceVariant.MALE);
-        }
-        return VoiceVariant.parseVoiceVariant(variant);
     }
 
     public int getRate() {
@@ -96,16 +80,6 @@ public class VoiceSettings {
         if (pitch > max) pitch = max;
         if (pitch < min) pitch = min;
         return pitch;
-    }
-
-    public int getPitchRange() {
-        int min = mEngine.PitchRange.getMinValue();
-        int max = mEngine.PitchRange.getMaxValue();
-
-        int range = getPreferenceValue(PREF_PITCH_RANGE, mEngine.PitchRange.getDefaultValue());
-        if (range > max) range = max;
-        if (range < min) range = min;
-        return range;
     }
 
     public int getVolume() {
@@ -142,10 +116,8 @@ public class VoiceSettings {
 
     public JSONObject toJSON() throws JSONException {
         JSONObject settings = new JSONObject();
-        settings.put(PRESET_VARIANT, getVoiceVariant().toString());
         settings.put(PRESET_RATE, getRate());
         settings.put(PRESET_PITCH, getPitch());
-        settings.put(PRESET_PITCH_RANGE, getPitchRange());
         settings.put(PRESET_VOLUME, getVolume());
         settings.put(PRESET_PUNCTUATION_CHARACTERS, getPunctuationCharacters());
         switch (getPunctuationLevel()) {

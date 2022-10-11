@@ -34,10 +34,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 
-import net.eguidedog.ekho.preference.ImportVoicePreference;
 import net.eguidedog.ekho.preference.SeekBarPreference;
-import net.eguidedog.ekho.preference.SpeakPunctuationPreference;
-import net.eguidedog.ekho.preference.VoiceVariantPreference;
 
 public class TtsSettingsActivity extends PreferenceActivity {
     @Override
@@ -72,23 +69,13 @@ public class TtsSettingsActivity extends PreferenceActivity {
             editor.putString(VoiceSettings.PREF_RATE, Integer.toString(rateValue));
         }
 
-        String variant = prefs.getString(VoiceSettings.PREF_VARIANT, null);
-        if (variant == null) {
-            String gender = prefs.getString(VoiceSettings.PREF_DEFAULT_GENDER, "0");
-            if (gender.equals("2")) {
-                editor.putString(VoiceSettings.PREF_VARIANT, VoiceVariant.FEMALE);
-            } else {
-                editor.putString(VoiceSettings.PREF_VARIANT, VoiceVariant.MALE);
-            }
-        }
-
         editor.commit();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
             getFragmentManager().beginTransaction().replace(
                     android.R.id.content,
-                    new PrefsEspeakFragment()).commit();
+                    new PrefsEkhoFragment()).commit();
         }
         else
         {
@@ -97,7 +84,7 @@ public class TtsSettingsActivity extends PreferenceActivity {
         }
     }
 
-    public static class PrefsEspeakFragment extends PreferenceFragment {
+    public static class PrefsEkhoFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -105,41 +92,6 @@ public class TtsSettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.preferences);
             createPreferences(getActivity(), getPreferenceScreen());
         }
-    }
-
-    private static Preference createImportVoicePreference(Context context) {
-        final String title = context.getString(R.string.import_voice_title);
-
-        final ImportVoicePreference pref = new ImportVoicePreference(context);
-        pref.setTitle(title);
-        pref.setDialogTitle(title);
-        pref.setOnPreferenceChangeListener(mOnPreferenceChanged);
-        pref.setDescription(R.string.import_voice_description);
-        return pref;
-    }
-
-    private static Preference createVoiceVariantPreference(Context context, VoiceSettings settings, int titleRes) {
-        final String title = context.getString(titleRes);
-
-        final VoiceVariantPreference pref = new VoiceVariantPreference(context);
-        pref.setTitle(title);
-        pref.setDialogTitle(title);
-        pref.setOnPreferenceChangeListener(mOnPreferenceChanged);
-        pref.setPersistent(true);
-        pref.setVoiceVariant(settings.getVoiceVariant());
-        return pref;
-    }
-
-    private static Preference createSpeakPunctuationPreference(Context context, VoiceSettings settings, int titleRes) {
-        final String title = context.getString(titleRes);
-
-        final SpeakPunctuationPreference pref = new SpeakPunctuationPreference(context);
-        pref.setTitle(title);
-        pref.setDialogTitle(title);
-        pref.setOnPreferenceChangeListener(mOnPreferenceChanged);
-        pref.setPersistent(true);
-        pref.setVoiceSettings(settings);
-        return pref;
     }
 
     private static Preference createSeekBarPreference(Context context, SpeechSynthesis.Parameter parameter, String key, int titleRes) {
@@ -189,12 +141,8 @@ public class TtsSettingsActivity extends PreferenceActivity {
         SpeechSynthesis engine = new SpeechSynthesis(context, null);
         VoiceSettings settings = new VoiceSettings(PreferenceManager.getDefaultSharedPreferences(context), engine);
 
-        group.addPreference(createImportVoicePreference(context));
-        group.addPreference(createVoiceVariantPreference(context, settings, R.string.ekho_variant));
-        group.addPreference(createSpeakPunctuationPreference(context, settings, R.string.ekho_speak_punctuation));
         group.addPreference(createSeekBarPreference(context, engine.Rate, VoiceSettings.PREF_RATE, R.string.setting_default_rate));
         group.addPreference(createSeekBarPreference(context, engine.Pitch, VoiceSettings.PREF_PITCH, R.string.setting_default_pitch));
-        group.addPreference(createSeekBarPreference(context, engine.PitchRange, VoiceSettings.PREF_PITCH_RANGE, R.string.ekho_pitch_range));
         group.addPreference(createSeekBarPreference(context, engine.Volume, VoiceSettings.PREF_VOLUME, R.string.ekho_volume));
     }
 

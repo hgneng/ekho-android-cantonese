@@ -58,6 +58,7 @@ public class CheckVoiceData extends Activity {
 
     public static boolean hasBaseResources(Context context) {
         final File dataPath = getDataPath(context);
+        Log.i(TAG, "dataPath=" + dataPath.toString());
 
         for (String resource : BASE_RESOURCES) {
             final File resourceFile = new File(dataPath, resource);

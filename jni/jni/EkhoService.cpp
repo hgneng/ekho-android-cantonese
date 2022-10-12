@@ -186,9 +186,19 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
   const char *c_path = path ? env->GetStringUTFChars(path, NULL) : NULL;
 
   if (DEBUG) LOGV("Initializing with path %s", c_path);
-  int sampleRate = 0; //espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, BUFFER_SIZE_IN_MILLISECONDS, c_path, 0);
+
+  if (!gp_ekho) {
+    gp_ekho = new ekho::Ekho();
+    Dict &dict = gp_ekho->getDict();
+    dict.mDataPath = c_path;
+    dict.mDataPath += "/ekho-data";
+    gp_ekho->setVoice("Cantonese");
+  }
 
   if (c_path) env->ReleaseStringUTFChars(path, c_path);
+
+  int sampleRate = gp_ekho->getSampleRate();
+  if (DEBUG) LOGV("sampleRate=%d", sampleRate);
 
   return sampleRate;
 }
@@ -273,19 +283,20 @@ static native_data_t *getNativeData(JNIEnv *env, jobject object) {
 JNIEXPORT jboolean
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSynthesize(
     JNIEnv *env, jobject object, jstring text, jboolean isSsml) {
-  if (DEBUG) LOGV("%s", __FUNCTION__);
+  if (DEBUG) LOGV("%s: isSsml=%d", __FUNCTION__, isSsml);
 
-  native_data_t *nat = getNativeData(env, object);
   const char *c_text = env->GetStringUTFChars(text, NULL);
-  nat->env = env;
+  //native_data_t *nat = getNativeData(env, object);
+  //nat->env = env;
 
-  if (DEBUG) LOGV("gp_ekho: %p", gp_ekho);
+  if (DEBUG) LOGV("text=%s, gp_ekho=%p", c_text, gp_ekho);
+  /*
   if (gp_ekho && *c_text) {
     if (DEBUG) LOGV("synth(len=%ul): %s", strlen(c_text), c_text);
     gp_ekho->synth2(c_text, SynthCallback, nat);
   }
 
-  env->ReleaseStringUTFChars(text, c_text);
+  env->ReleaseStringUTFChars(text, c_text);*/
 
   return JNI_TRUE;
 }

@@ -32,6 +32,7 @@ package net.eguidedog.ekho;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.media.AudioFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -104,7 +105,7 @@ public class SpeechSynthesis {
     }
 
     public int getAudioFormat() {
-        return FORMAT_PCM_S16;
+        return AudioFormat.ENCODING_PCM_16BIT; // FORMAT_PCM_S16;
     }
 
     private Locale getLocaleFromLanguageName(String name) {

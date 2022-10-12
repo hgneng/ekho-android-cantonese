@@ -60,7 +60,7 @@ import java.util.Set;
  */
 @SuppressLint("NewApi")
 public class TtsService extends TextToSpeechService {
-    public static final String EKHO_INITIALIZED = "net.eguidedog.ekho.ESPEAK_INITIALIZED";
+    public static final String EKHO_INITIALIZED = "net.eguidedog.ekho.EKHO_INITIALIZED";
 
     private static final String TAG = TtsService.class.getSimpleName();
     private static final boolean DEBUG = false;
@@ -108,6 +108,7 @@ public class TtsService extends TextToSpeechService {
 
     @Override
     protected String[] onGetLanguage() {
+        Log.i(TAG, "TtsService::onGetLanguage");
         // This is used to specify the language requested from GetSampleText.
         if (mMatchingVoice == null) {
             return new String[] { "eng", "GBR", "" };

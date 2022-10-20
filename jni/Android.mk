@@ -56,7 +56,7 @@ EKHO_SRC_FILES += sr-convert/dsp.cpp sonic/sonic.c
 LOCAL_SRC_FILES += \
   $(filter-out $(BLACKLIST_SRC_FILES),$(EKHO_SRC_FILES))
 
-LOCAL_CFLAGS := -fexceptions -Wno-bitwise-op-parentheses -Wno-shift-negative-value -DOUTPUT16BIT -DNO_SSE -O0 -DANDROID #-DDEBUG_ANDROID
+LOCAL_CFLAGS := -fexceptions -Wno-bitwise-op-parentheses -Wno-shift-negative-value -DOUTPUT16BIT -DNO_SSE -O0 -DANDROID -DDEBUG_ANDROID
 
 # JNI
 

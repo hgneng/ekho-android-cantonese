@@ -134,12 +134,12 @@ static JNIEnv *getJniEnv() {
   return env;
 }
 
-/* Callback from espeak.  Should call back to the TTS API */
-static int SynthCallback(short *audioData, int numSamples,
+/* Callback from Ekho.  Should call back to the TTS API */
+static int AndroidSynthCallback(short *audioData, int numSamples,
                          void *data, OverlapType type) {
+  if (DEBUG) LOGV("%s [numSamples=%d, type=%d]", __FUNCTION__, numSamples, type);
   JNIEnv *env = getJniEnv();
-  native_data_t *nat = (native_data_t *) data;
-  jobject object = nat->object;
+  jobject object = (jobject)data;
 
   if (numSamples < 1) {
     env->CallVoidMethod(object, METHOD_nativeSynthCallback, NULL);
@@ -188,10 +188,12 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
   if (DEBUG) LOGV("Initializing with path %s", c_path);
 
   if (!gp_ekho) {
+    Ekho::debug(DEBUG);
     gp_ekho = new ekho::Ekho();
     Dict &dict = gp_ekho->getDict();
     dict.mDataPath = c_path;
     dict.mDataPath += "/ekho-data";
+    Audio::setTempDirectory(dict.mDataPath + "/tmp");
     gp_ekho->setVoice("Cantonese");
   }
 
@@ -276,27 +278,17 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetPunctuationCharacters(
   return JNI_FALSE;
 }
 
-static native_data_t *getNativeData(JNIEnv *env, jobject object) {
-  return (native_data_t *) (env->GetIntField(object, FIELD_mNativeData));
-}
-
 JNIEXPORT jboolean
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSynthesize(
     JNIEnv *env, jobject object, jstring text, jboolean isSsml) {
   if (DEBUG) LOGV("%s: isSsml=%d", __FUNCTION__, isSsml);
-
   const char *c_text = env->GetStringUTFChars(text, NULL);
-  //native_data_t *nat = getNativeData(env, object);
-  //nat->env = env;
-
   if (DEBUG) LOGV("text=%s, gp_ekho=%p", c_text, gp_ekho);
-  /*
   if (gp_ekho && *c_text) {
-    if (DEBUG) LOGV("synth(len=%ul): %s", strlen(c_text), c_text);
-    gp_ekho->synth2(c_text, SynthCallback, nat);
+    gp_ekho->synth2(c_text, AndroidSynthCallback, object);
   }
 
-  env->ReleaseStringUTFChars(text, c_text);*/
+  env->ReleaseStringUTFChars(text, c_text);
 
   return JNI_TRUE;
 }

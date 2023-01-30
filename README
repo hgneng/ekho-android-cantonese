@@ -48,3 +48,35 @@ We may need to fix atof with strtod.
 We may need to upgrade Android API to 21 (minSdkVersion in build.gradle and APP_PLATFORM := android-21 in Application.mk) to fix undefined reference 'rand' issue. (refer to https://stackoverflow.com/questions/66455212/android-ndk-returns-an-error-undefined-reference-to-rand-srand)
 
 We may need to use nm to check flite.a to debug undefined reference issue. Sometimes, we use C++ compiler to build flite will cause undefined reference issue.
+
+##### flite diff #####
+~/code/ekho-android-cantonese/jni/flite$ git diff
+diff --git a/config/android.lv b/config/android.lv
+index ff5422e..19dc4db 100644
+--- a/config/android.lv
++++ b/config/android.lv
+@@ -1,5 +1,8 @@
+ #
+ #  The base languages, lexicons and voices
+-LEXES += cmulex cmu_indic_lang
+-LANGS += usenglish cmu_indic_lex
++#LEXES += cmulex cmu_indic_lang
++LEXES += cmulex
++#LANGS += usenglish cmu_indic_lex
++LANGS += usenglish
+ #VOXES += cmu_us_generic_cg
++VOXES += cmu_us_kal
+diff --git a/src/utils/cst_string.c b/src/utils/cst_string.c
+index 38bc5f3..1242b36 100644
+--- a/src/utils/cst_string.c
++++ b/src/utils/cst_string.c
+@@ -74,7 +74,8 @@ cst_string *cst_strrchr(const cst_string *str, int c)
+
+ double cst_atof(const char *str)
+ {
+-    return atof(str);
++    char* endPtr;
++    return strtod(str, &endPtr);
+ }
+ #endif /* WinCE */
+

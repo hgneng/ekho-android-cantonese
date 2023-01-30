@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <jni.h>
+#include <flite.h>
 
 #include <ekho.h>
 #include <Log.h>
@@ -117,7 +118,6 @@ static wchar_t *unicode_string(JNIEnv *env, jstring str)
 
 //@}
 
-#define LOG_TAG "EkhoService"
 #define DEBUG true
 
 enum synthesis_result {
@@ -178,6 +178,34 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeClassInit(
   return JNI_TRUE;
 }
 
+//extern "C" void usenglish_init(cst_voice *v);
+//extern "C" cst_lexicon *cmulex_init(void);
+
+void setVoiceList() {
+  /*
+  if(loadedVoices != NULL) {
+    LOGD("Voices already initialized!");
+    return;
+  }
+  LOGI("Starting setVoiceList");*/
+  //flite_add_lang("eng", usenglish_init, cmulex_init);
+  /*
+  loadedVoices = new FliteEngine::Voices(0, FliteEngine::ONLY_ONE_VOICE_REGISTERED); // Max number of voices is the first argument.
+  if(loadedVoices == NULL)
+    {
+LOGE("Voice list could not be initialized!");
+return;
+    }
+  LOGI("setVoiceList: list initialized");*/
+  LOGI("setVoiceList done");
+}
+
+cst_voice *register_cmu_us_kal(const char *voxdir);
+
+void initFlite() {
+  if (DEBUG) LOGV("initFlite");
+}
+
 JNIEXPORT jint
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
     JNIEnv *env, jobject object, jstring path) {
@@ -196,6 +224,8 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
     Audio::setTempDirectory(dict.mDataPath + "/tmp");
     gp_ekho->setVoice("Cantonese");
   }
+
+  initFlite();
 
   if (c_path) env->ReleaseStringUTFChars(path, c_path);
 

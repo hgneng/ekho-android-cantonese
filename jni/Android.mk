@@ -8,13 +8,13 @@ LOCAL_PATH:= $(call my-dir)
 #  $(error "FLITEDIR variable should be set to path where flite is compiled")
 #endif
 
-#FLITE_BUILD_SUBDIR:=$(TARGET_ARCH_ABI)
+FLITE_BUILD_SUBDIR:=$(TARGET_ARCH_ABI)
 
 #ifeq "$(TARGET_ARCH_ABI)" "armeabi-v7a"
 #  FLITE_BUILD_SUBDIR:="armeabiv7a"
 #endif
 
-#FLITE_LIB_DIR:= $(FLITEDIR)/build/$(FLITE_BUILD_SUBDIR)-android/lib
+FLITE_LIB_DIR:= $(LOCAL_PATH)/flite/build/$(FLITE_BUILD_SUBDIR)-android/lib
 ###########################################################################
 
 include $(CLEAR_VARS)
@@ -59,7 +59,6 @@ LOCAL_SRC_FILES += \
 LOCAL_CFLAGS := -fexceptions -Wno-bitwise-op-parentheses -Wno-shift-negative-value -DOUTPUT16BIT -DNO_SSE -O0 -DANDROID -DDEBUG_ANDROID
 
 # JNI
-
 LOCAL_SRC_FILES += \
   $(subst $(LOCAL_PATH)/jni,jni,$(wildcard $(LOCAL_PATH)/jni/*.c*))
 
@@ -70,13 +69,14 @@ LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/utfcpp/source \
   $(LOCAL_PATH)/sr-convert \
   $(LOCAL_PATH)/sonic \
-  $(FLITEDIR)/include
+  $(LOCAL_PATH)/flite/include
 
-LOCAL_LDLIBS := -llog -lstdc++ #\
-#  $(FLITE_LIB_DIR)/libflite_cmulex.a \
-#  $(FLITE_LIB_DIR)/libflite_usenglish.a \
-#  $(FLITE_LIB_DIR)/libflite.a \
-  
+LOCAL_LDLIBS := -llog -lstdc++ \
+  $(FLITE_LIB_DIR)/libflite_cmu_us_kal.a \
+  $(FLITE_LIB_DIR)/libflite_cmulex.a \
+  $(FLITE_LIB_DIR)/libflite_usenglish.a \
+  $(FLITE_LIB_DIR)/libflite.a
+
 # Common
 
 LOCAL_MODULE := libttsekho

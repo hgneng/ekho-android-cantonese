@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.eguidedog.ekho">
-    <uses-sdk android:minSdkVersion="21" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -12,7 +11,7 @@
         android:theme="@style/AppTheme"
         android:label="@string/app_name" >
         <service
-            android:exported="false"
+            android:exported="true"
             android:name=".TtsService"
             android:label="@string/app_name" >
             <intent-filter>
@@ -67,9 +66,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:exported="false"
-            android:name=".EkhoActivity"
-            android:label="@string/app_name" >
+            android:exported="true"
+            android:name=".EkhoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

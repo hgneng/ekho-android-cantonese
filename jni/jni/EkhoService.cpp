@@ -202,10 +202,6 @@ return;
 
 cst_voice *register_cmu_us_kal(const char *voxdir);
 
-void initFlite() {
-  if (DEBUG) LOGV("initFlite");
-}
-
 JNIEXPORT jint
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
     JNIEnv *env, jobject object, jstring path) {
@@ -224,8 +220,6 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
     Audio::setTempDirectory(dict.mDataPath + "/tmp");
     gp_ekho->setVoice("Cantonese");
   }
-
-  initFlite();
 
   if (c_path) env->ReleaseStringUTFChars(path, c_path);
 

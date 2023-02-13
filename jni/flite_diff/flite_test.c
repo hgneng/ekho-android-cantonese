@@ -17,6 +17,7 @@ int main(int argc, char **argv)
 
     v = register_cmu_us_kal(NULL);
 
-    flite_file_to_speech(argv[1],v,"hello.wav");
-
+    // flite_file_to_speech(argv[1],v,"hello.wav");
+    cst_wave *flite_wave = flite_text_to_wave(argv[1], v);
+    printf("samples: %d", flite_wave->num_samples);
 }

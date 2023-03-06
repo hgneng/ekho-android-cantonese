@@ -16,7 +16,6 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.TTS_SERVICE" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
@@ -55,8 +54,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!-- 好像没有什么特别需要设置的，简化掉
         <activity
             android:exported="false"
+            android:hardwareAccelerated="false"
             android:name=".TtsSettingsActivity"
             android:label="@string/tts_settings_label" >
             <intent-filter>
@@ -65,8 +66,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        -->
         <activity
             android:exported="true"
+            android:hardwareAccelerated="false"
             android:name=".EkhoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

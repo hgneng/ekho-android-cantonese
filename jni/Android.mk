@@ -72,7 +72,7 @@ LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/flite/include
 
 LOCAL_LDLIBS := -llog -lstdc++ \
-  $(FLITE_LIB_DIR)/libflite_cmu_us_kal.a \
+  $(FLITE_LIB_DIR)/libflite_cmu_us_kal16.a \
   $(FLITE_LIB_DIR)/libflite_cmulex.a \
   $(FLITE_LIB_DIR)/libflite_usenglish.a \
   $(FLITE_LIB_DIR)/libflite.a

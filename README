@@ -47,7 +47,11 @@ We may need to fix atof with strtod.
 
 We may need to upgrade Android API to 21 (minSdkVersion in build.gradle and APP_PLATFORM := android-21 in Application.mk) to fix undefined reference 'rand' issue. (refer to https://stackoverflow.com/questions/66455212/android-ndk-returns-an-error-undefined-reference-to-rand-srand)
 
-We may need to use nm to check flite.a to debug undefined reference issue. Sometimes, we use C++ compiler to build flite will cause undefined reference issue.
+We may need to use nm to check flite.a to debug undefined reference issue. Sometimes, we use C++ compiler to build flite will cause undefined reference issue. Symbols may be stripped in some so file in order to reduce size.
+
+g721_encoder g721_decoder exists both in flite and libsndfile. Need to rename them in flite in case of conflict.
+
+After modifying libs, we need to make some changes in EkhoService.cpp to trigger re-link the libs and generate a new libttsekho.so.
 
 ##### flite diff #####
 ~/code/ekho-android-cantonese/jni/flite$ git diff
@@ -80,3 +84,57 @@ index 38bc5f3..1242b36 100644
  }
  #endif /* WinCE */
 
+ekho-android-cantonese/jni/flite$ git diff
+diff --git a/src/speech/cst_wave_utils.c b/src/speech/cst_wave_utils.c
+index c69066e..ef11c5f 100644
+--- a/src/speech/cst_wave_utils.c
++++ b/src/speech/cst_wave_utils.c
+@@ -163,7 +163,7 @@ unsigned char *cst_g721_decode(int *actual_size,int size,
+             code = (xcode & 0xF0) >> dec_bits;
+         else
+             code = (xcode & 0x0F);
+-        sample_short = g721_decoder(code,AUDIO_ENCODING_LINEAR,&state);
++        sample_short = flite_g721_decoder(code,AUDIO_ENCODING_LINEAR,&state);
+         unpacked_residual[ur] = cst_short_to_ulaw(sample_short);
+     }
+
+diff --git a/src/speech/g721.c b/src/speech/g721.c
+index d1cec7b..e51efd4 100644
+--- a/src/speech/g721.c
++++ b/src/speech/g721.c
+@@ -115,7 +115,7 @@ static short        _fitab[16] = {0, 0, 0, 0x200, 0x200, 0x200, 0x600, 0xE00,
+  * the resulting code. -1 is returned for unknown input coding value.
+  */
+ int
+-g721_encoder(
++flite_g721_encoder(
+        int             sl,
+        int             in_coding,
+        struct g72x_state *state_ptr)
+@@ -166,7 +166,7 @@ g721_encoder(
+  * return -1 for unknown out_coding value.
+  */
+ int
+-g721_decoder(
++flite_g721_decoder(
+        int             i,
+        int             out_coding,
+        struct g72x_state *state_ptr)
+diff --git a/src/speech/g72x.h b/src/speech/g72x.h
+index ab18d8e..17759b4 100644
+--- a/src/speech/g72x.h
++++ b/src/speech/g72x.h
+@@ -118,11 +118,11 @@ struct g72x_state {
+ /* External function definitions. */
+
+ extern void g72x_init_state(struct g72x_state *);
+-extern int g721_encoder(
++extern int flite_g721_encoder(
+                int sample,
+                int in_coding,
+                struct g72x_state *state_ptr);
+-extern int g721_decoder(
++extern int flite_g721_decoder(
+                int code,
+                int out_coding,
+                struct g72x_state *state_ptr);

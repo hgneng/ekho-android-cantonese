@@ -149,6 +149,7 @@ static int AndroidSynthCallback(short *audioData, int numSamples,
     env->SetByteArrayRegion(arrayAudioData, 0, (numSamples * 2), (jbyte *) audioData);
     env->CallVoidMethod(object, METHOD_nativeSynthCallback, arrayAudioData);
     return SYNTH_CONTINUE;
+    // Ekho在调用完callback之后会释放audioData
   }
 }
 
@@ -200,7 +201,8 @@ return;
   LOGI("setVoiceList done");
 }
 
-cst_voice *register_cmu_us_kal(const char *voxdir);
+#include "flite.h"
+cst_voice *register_cmu_us_kal16(const char *voxdir);
 
 JNIEXPORT jint
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
@@ -219,6 +221,13 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
     dict.mDataPath += "/ekho-data";
     Audio::setTempDirectory(dict.mDataPath + "/tmp");
     gp_ekho->setVoice("Cantonese");
+    /*
+    LOGV("read to test");
+    flite_init();
+    cst_voice *v = register_cmu_us_kal16(NULL);
+    cst_wave *flite_wave = flite_text_to_wave("hello", v);
+    LOGV("samples: %d", flite_wave->num_samples);
+    */
   }
 
   if (c_path) env->ReleaseStringUTFChars(path, c_path);
@@ -290,7 +299,8 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetParameter(
 JNIEXPORT jint
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeGetParameter(
     JNIEnv *env, jobject object, jint parameter, jint current) {
-  if (DEBUG) LOGV("%s(parameter=%d, pitch=%d)", __FUNCTION__, parameter, current);
+  if (DEBUG) LOGV("%s(parameter=%d, value=%d)", __FUNCTION__, parameter, current);
+  //return gp_ekho->get
   return 0;
 }
 

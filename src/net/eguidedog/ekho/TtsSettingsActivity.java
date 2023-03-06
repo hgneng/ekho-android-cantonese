@@ -20,6 +20,7 @@
  * limitations under the License.
  */
 
+// 这个文件没有用了，不再提供定制配置项
 package net.eguidedog.ekho;
 
 import android.content.Context;

@@ -317,7 +317,7 @@ public class SpeechSynthesis {
 
     private native final boolean nativeSetVoiceByName(String name);
 
-    private native final boolean nativeSetVoiceByProperties(String language, int gender, int age);
+    //private native final boolean nativeSetVoiceByProperties(String language, int gender, int age);
 
     private native final boolean nativeSetParameter(int parameter, int value);
 

@@ -22,6 +22,7 @@
 package net.eguidedog.ekho;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,12 +32,12 @@ public class VoiceSettings {
     private final SpeechSynthesis mEngine;
 
     public static final String PREF_DEFAULT_RATE = "default_rate";
-    public static final String PREF_RATE = "ekho__rate";
+    public static final String PREF_RATE = "ekho_rate";
     public static final String PREF_DEFAULT_PITCH = "default_pitch";
-    public static final String PREF_PITCH = "ekho__pitch";
-    public static final String PREF_VOLUME = "ekho__volume";
-    public static final String PREF_PUNCTUATION_LEVEL = "ekho__punctuation_level";
-    public static final String PREF_PUNCTUATION_CHARACTERS = "ekho__punctuation_characters";
+    public static final String PREF_PITCH = "ekho_pitch";
+    public static final String PREF_VOLUME = "ekho_volume";
+    public static final String PREF_PUNCTUATION_LEVEL = "ekho_punctuation_level";
+    public static final String PREF_PUNCTUATION_CHARACTERS = "ekho_punctuation_characters";
 
     public static final String PRESET_RATE = "rate";
     public static final String PRESET_PITCH = "pitch";
@@ -79,6 +80,10 @@ public class VoiceSettings {
 
         if (pitch > max) pitch = max;
         if (pitch < min) pitch = min;
+
+        Log.d("Ekho", "VoiceSettings.java:getPitch min=" + min +
+            ", max=" + max + ", pitch=" + pitch);
+
         return pitch;
     }
 

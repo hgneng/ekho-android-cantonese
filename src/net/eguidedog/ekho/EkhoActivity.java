@@ -143,7 +143,7 @@ public class EkhoActivity extends Activity {
         inflater.inflate(R.menu.options, menu);
         if (Build.VERSION.SDK_INT < 14) {
             // Hide the Ekho setting menu item on pre-ICS.
-            menu.findItem(R.id.ekhoSettings).setVisible(false);
+            //menu.findItem(R.id.ekhoSettings).setVisible(false);
         }
         return true;
     }
@@ -152,10 +152,10 @@ public class EkhoActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
-        {
+        {/*
         case R.id.ekhoSettings:
             startActivityForResult(new Intent(EkhoActivity.this, TtsSettingsActivity.class), REQUEST_DEFAULT);
-            return true;
+            return true;*/
         case R.id.ttsSettings:
             launchGeneralTtsSettings();
             return true;

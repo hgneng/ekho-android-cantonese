@@ -288,12 +288,54 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetVoiceByName(
   return JNI_FALSE;
 }
 
+/*
+    public final Parameter Rate = new Parameter(1, 80, 449, UnitType.WordsPerMinute);
+    public final Parameter Volume = new Parameter(2, 0, 200, UnitType.Percentage);
+    public final Parameter Pitch = new Parameter(3, 0, 100, UnitType.Percentage);
+    public final Parameter PitchRange = new Parameter(4, 0, 100, UnitType.Percentage);
+    public final Parameter Punctuation = new Parameter(5, 0, 2, UnitType.Punctuation);
+*/
+
 JNIEXPORT jboolean
 JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSetParameter(
     JNIEnv *env, jobject object, jint parameter, jint value) {
-  if (DEBUG) LOGV("%s(parameter=%d, value=%d)", __FUNCTION__, parameter, value);
+  if (DEBUG) {
+    LOGV("%s(parameter=%d, value=%d)", __FUNCTION__, parameter, value);
+  }
 
-  return JNI_FALSE;
+  if (parameter == 1) {
+    // speed
+    // map [0, 80, 449] to [-50, 0, 100]
+    int ekhoSpeedDelta = 0;
+    if (value > 80) {
+      ekhoSpeedDelta = (value - 80) * 100 / (449 - 80);
+    } else if (value < 80) {
+      ekhoSpeedDelta = -value * 50 / 80;
+    }
+
+    if (DEBUG) {
+      LOGV("%s(ekhoSpeedDelta=%d)", __FUNCTION__, ekhoSpeedDelta);
+    }
+
+    gp_ekho->setSpeed(ekhoSpeedDelta);
+  } else if (parameter == 3) {
+    // pitch
+    // map [0, 50, 200] to [-100, 0, 100]
+    int ekhoPitchDelta = 0;
+    if (value > 50) {
+      ekhoPitchDelta = (value - 50) * 100 / 150;
+    } else if (value < 50) {
+      ekhoPitchDelta = -value / 2;
+    }
+
+    if (DEBUG) {
+      LOGV("%s(ekhoPitchDelta=%d)", __FUNCTION__, ekhoPitchDelta);
+    }
+
+    gp_ekho->setPitch(ekhoPitchDelta);
+  }
+
+  return JNI_OK;
 }
 
 JNIEXPORT jint
@@ -319,7 +361,7 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeSynthesize(
   const char *c_text = env->GetStringUTFChars(text, NULL);
   if (DEBUG) LOGV("text=%s, gp_ekho=%p", c_text, gp_ekho);
   if (gp_ekho && *c_text) {
-    gp_ekho->synth2(c_text, AndroidSynthCallback, object);
+    gp_ekho->synth4(c_text, AndroidSynthCallback, object);
   }
 
   env->ReleaseStringUTFChars(text, c_text);

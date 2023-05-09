@@ -67,12 +67,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/speak" />
 
-            <Button
-                android:id="@+id/ssml"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ssml" />
-
         </LinearLayout>
 
     </LinearLayout>

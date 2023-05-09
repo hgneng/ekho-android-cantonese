@@ -103,18 +103,6 @@ public class EkhoActivity extends Activity {
                 }
             }
         });
-
-        findViewById(R.id.ssml).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String ssml =
-                    "<?xml version=\"1.0\"?>\n" +
-                    "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\" version=\"1.0\">\n" +
-                    "\n" +
-                    "</speak>";
-                mText.setText(ssml);
-            }
-        });
     }
 
     @Override

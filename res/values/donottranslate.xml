@@ -4,6 +4,6 @@
         Source: App icon label.
         Description: The name of the application.
     -->
-  <string name="app_name" translatable="false">Ekho</string>
+  <string name="app_name" translatable="false">粵語TTS</string>
 
 </resources>

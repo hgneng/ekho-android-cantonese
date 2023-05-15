@@ -33,6 +33,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceActivity;
 import android.speech.tts.TextToSpeech;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
@@ -41,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -70,6 +73,7 @@ public class EkhoActivity extends Activity {
     private List<Pair<String,String>> mInformation;
     private InformationListAdapter mInformationView;
     private EditText mText;
+    private TextView mTextView;
 
     private final BroadcastReceiver mOnEspeakInitialized = new BroadcastReceiver() {
         @Override
@@ -88,6 +92,11 @@ public class EkhoActivity extends Activity {
         mInformationView = new InformationListAdapter(this, mInformation);
         ((ListView)findViewById(R.id.properties)).setAdapter(mInformationView);
         mText = (EditText)findViewById(R.id.editText1);
+
+        mTextView = (TextView)findViewById(R.id.textView);
+        mTextView.setText(Html.fromHtml("<a href=\"https://eguidedog.net/privacy/privacy-ekho.html\">Privacy Policy</a>"));
+        mTextView.setLinksClickable(true);
+        mTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         setState(State.LOADING);
         checkVoiceData();

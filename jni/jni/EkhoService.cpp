@@ -221,6 +221,7 @@ JNICALL Java_net_eguidedog_ekho_SpeechSynthesis_nativeCreate(
     dict.mDataPath += "/ekho-data";
     Audio::setTempDirectory(dict.mDataPath + "/tmp");
     gp_ekho->setVoice("Cantonese");
+    //gp_ekho->setVoice("Mandarin");
     /*
     LOGV("read to test");
     flite_init();

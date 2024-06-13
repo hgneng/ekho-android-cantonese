@@ -1,3 +1,32 @@
+##### How to build Mandarin Voice #####
+1. jni/jni/EkhoService.cpp about line 223, change to gp_ekho->setVoice("Mandarin");
+2. res/raw/ekhodata.zip->Cantonese files(.dict/.voice/.index) replace with linux ekho-9.0.tar.xz->Mandarin files(.dict/.voice/.index)
+3. change applicationId in build.gradle
+4. change app_name in res/values/donottranslate.xml
+5. change icon
+6. change CheckVoiceData.java
+$ git diff src/net/eguidedog/ekho/CheckVoiceData.java
+diff --git a/src/net/eguidedog/ekho/CheckVoiceData.java b/src/net/eguidedog/ekho/CheckVoiceData.java
+index 1d62312..8789756 100644
+--- a/src/net/eguidedog/ekho/CheckVoiceData.java
++++ b/src/net/eguidedog/ekho/CheckVoiceData.java
+@@ -47,9 +47,12 @@ public class CheckVoiceData extends Activity {
+
+     /** Resources required for Ekho to run correctly. */
+     private static final String[] BASE_RESOURCES = {
+-        "zhy.dict",
+-        "jyutping.index",
+-        "jyutping.voice",
++            "zh.dict",
++            "pinyin.index",
++            "pinyin.voice",
++        //"zhy.dict",
++        //"jyutping.index",
++        //"jyutping.voice",
+     };
+
+     public static File getDataPath(Context context) {
+
 ##### How to build #####
 1. open project with Android Studio.
 2. ndk-build V=1

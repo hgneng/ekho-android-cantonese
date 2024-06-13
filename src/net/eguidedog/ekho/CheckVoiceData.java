@@ -47,6 +47,9 @@ public class CheckVoiceData extends Activity {
 
     /** Resources required for Ekho to run correctly. */
     private static final String[] BASE_RESOURCES = {
+        //    "zh.dict",
+        //    "pinyin.index",
+        //    "pinyin.voice",
         "zhy.dict",
         "jyutping.index",
         "jyutping.voice",
